@@ -51,30 +51,30 @@ jobs:
         SLACK_USERNAME: something
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 
-    - name: Notify slack success
-      if: success()
-      id: slack # IMPORTANT: reference this step ID value in future Slack steps
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: voxmedia/github-action-slack-notify-build@v1
-      with:
-        channel: githubactions_notifications
-        status: STARTING
-        color: warning
+- name: Notify slack success
+  if: success()
+  id: slack # IMPORTANT: reference this step ID value in future Slack steps
+  env:
+    SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  uses: voxmedia/github-action-slack-notify-build@v1
+  with:
+    channel: githubactions_notifications
+    status: STARTING
+    color: warning
 
-    - name: Sleep for 5 seconds
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '5s'
+- name: Sleep for 5 seconds
+  uses: jakejarvis/wait-action@master
+  with:
+    time: '5s'
 
-    - name: Notify slack success
-      if: success()
-      env:
-        SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      uses: voxmedia/github-action-slack-notify-build@v1
-      with:
-        # Updates existing message from the first step
-        message_id: ${{ steps.slack.outputs.message_id }}
-        channel: githubactions_notifications
-        status: SUCCESS
-        color: good
+- name: Notify slack success
+  if: success()
+  env:
+    SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  uses: voxmedia/github-action-slack-notify-build@v1
+  with:
+    # Updates existing message from the first step
+    message_id: ${{ steps.slack.outputs.message_id }}
+    channel: githubactions_notifications
+    status: SUCCESS
+    color: good
