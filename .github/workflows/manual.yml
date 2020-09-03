@@ -1,0 +1,81 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual workflow Agustin
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+#  push:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Person to greet'
+        # Default value if no value is explicitly provided
+        default: 'Master'
+        # Input has to be provided for the workflow to run
+        required: true
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send greeting
+      id: name1
+      run: echo "Hello ${{ github.event.inputs.name }}"
+
+  message:
+    runs-on: ubuntu-latest
+    steps:
+    - name: message1
+      id: message1
+      #if: ${{ failure() }}
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+      env:
+        GITHUB_TOKEN: ${{ github.token }} # optional
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+
+
+    - name: Message2
+      id: message2
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: githubactions_notifications
+        SLACK_COLOR: '#3278BD'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: 'Post Content :rocket:'
+        SLACK_TITLE: Testing Second Notification
+        SLACK_USERNAME: mcdermg
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Notify slack success
+      if: success()
+      id: slack # IMPORTANT: reference this step ID value in future Slack steps
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_WEBHOOK_URL }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        channel: githubactions_notifications
+        status: STARTING
+        color: warning
+
+    - name: Sleep for 5 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '5s'
+
+    - name: Notify slack success
+      if: success()
+      env:
+        SLACK_BOT_TOKEN: ${{ secrets.SLACK_WEBHOOK_URL }}
+      uses: voxmedia/github-action-slack-notify-build@v1
+      with:
+        # Updates existing message from the first step
+        message_id: ${{ steps.slack.outputs.message_id }}
+        channel: app-alerts
+        status: SUCCESS
+        color: good
