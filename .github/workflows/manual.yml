@@ -10,7 +10,6 @@ on:
     # Inputs the workflow accepts.
     branches:
       - refs/heads/test-agustin
-      - "refs/heads/test-agustin"
       - test-branch-1
     inputs:
       name:
