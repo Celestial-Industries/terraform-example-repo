@@ -13,7 +13,7 @@ on:
         # Friendly description to be shown in the UI instead of 'name'
         description: 'Person to greet'
         # Default value if no value is explicitly provided
-        default: 'Master'
+        default: 'Slack'
         # Input has to be provided for the workflow to run
         required: true
 
@@ -26,19 +26,18 @@ jobs:
       run: echo "Hello ${{ github.event.inputs.name }}"
 
   message:
-    runs-on: ubuntu-latest
-    steps:
-    - name: message1
-      id: message1
-      #if: ${{ failure() }}
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
-      env:
-        GITHUB_TOKEN: ${{ github.token }} # optional
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: message1
+#      id: message1
+#      #if: ${{ failure() }}
+#      uses: 8398a7/action-slack@v3
+#      with:
+#        status: ${{ job.status }}
+#        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
+#      env:
+#        GITHUB_TOKEN: ${{ github.token }} # optional
+#        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
 
     - name: Message2
       id: message2
@@ -47,9 +46,9 @@ jobs:
         SLACK_CHANNEL: githubactions_notifications
         SLACK_COLOR: '#3278BD'
         SLACK_ICON: https://github.com/rtCamp.png?size=48
-        SLACK_MESSAGE: 'Post Content :rocket:'
-        SLACK_TITLE: Testing Second Notification
-        SLACK_USERNAME: mcdermg
+        SLACK_MESSAGE: 'Post Content :rocket: ${{ github.event.inputs.name }}'
+        SLACK_TITLE: Notification
+        SLACK_USERNAME: something
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Notify slack success
@@ -76,6 +75,6 @@ jobs:
       with:
         # Updates existing message from the first step
         message_id: ${{ steps.slack.outputs.message_id }}
-        channel: app-alerts
+        channel: githubactions_notifications
         status: SUCCESS
         color: good
