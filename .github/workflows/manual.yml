@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     branches:
-    - refs/heads/test-agustin
-    - test-branch-1
+      - refs/heads/test-agustin
+      - test-branch-1
     inputs:
       name:
         # Friendly description to be shown in the UI instead of 'name'
