@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: message
-      #id: message1
+      id: message1
       #if: ${{ failure() }}
       uses: 8398a7/action-slack@v3
       with:
@@ -38,3 +38,16 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }} # optional
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+
+
+    - name: Slack Notification
+      id: message2
+      uses: rtCamp/action-slack-notify@master
+      env:
+        SLACK_CHANNEL: githubactions_notifications
+        SLACK_COLOR: '#3278BD'
+        SLACK_ICON: https://github.com/rtCamp.png?size=48
+        SLACK_MESSAGE: 'Post Content :rocket:'
+        SLACK_TITLE: Testing Second Notification
+        SLACK_USERNAME: mcdermg
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
