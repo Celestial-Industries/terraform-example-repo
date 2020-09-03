@@ -8,6 +8,7 @@ on:
 #  push:
   workflow_dispatch:
     # Inputs the workflow accepts.
+    ref: refs/heads/master
     inputs:
       name:
         # Friendly description to be shown in the UI instead of 'name'
