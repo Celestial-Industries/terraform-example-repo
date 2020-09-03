@@ -17,27 +17,24 @@ on:
         # Input has to be provided for the workflow to run
         required: true
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "greet"
   greet:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Runs a single command using the runners shell
     - name: Send greeting
+      id: name1
       run: echo "Hello ${{ github.event.inputs.name }}"
 
   message:
     runs-on: ubuntu-latest
     steps:
-    - uses: 8398a7/action-slack@v3
+    - name: message
+      #id: message1
+      #if: ${{ failure() }}
+      uses: 8398a7/action-slack@v3
       with:
         status: ${{ job.status }}
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
       env:
         GITHUB_TOKEN: ${{ github.token }} # optional
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-      if: always() # Pick up events even if the job fails or is canceled.
