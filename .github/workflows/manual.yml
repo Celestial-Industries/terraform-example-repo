@@ -19,7 +19,7 @@ on:
 
 jobs:
   greet:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set-01
     steps:
     - name: Send greeting
       id: name1
