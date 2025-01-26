@@ -19,7 +19,7 @@ on:
 
 jobs:
   greet:
-    runs-on: arc-runner-set-01
+    runs-on: arc-runner-set-02
     steps:
     - name: Send greeting
       id: name1
